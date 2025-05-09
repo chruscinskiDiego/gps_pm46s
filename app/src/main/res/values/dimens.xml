@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="fab_margin_large">72dp</dimen>
+    <dimen name="fab_margin_extra_large">128dp</dimen>
+    <!-- Add other dimensions here -->
+</resources>
