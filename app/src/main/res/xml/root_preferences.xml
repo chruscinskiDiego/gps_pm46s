@@ -1,34 +1,22 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/messages_header">
+    <PreferenceCategory>
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
+        <ListPreference
+            app:defaultValue="Satélite"
+            app:entries="@array/maps_types"
+            app:entryValues="@array/maps_types"
+            app:key="maps_types"
+            app:title="@string/maps_type_header"
             app:useSimpleSummaryProvider="true" />
 
         <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
+            app:defaultValue="Médio"
+            app:entries="@array/zoom"
+            app:entryValues="@array/zoom"
+            app:key="zoom"
+            app:title="@string/maps_zoom_header"
             app:useSimpleSummaryProvider="true" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory app:title="@string/sync_header">
-
-        <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
-
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
 
     </PreferenceCategory>
 

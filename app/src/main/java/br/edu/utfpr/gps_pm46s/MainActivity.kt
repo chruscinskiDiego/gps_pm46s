@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.preference.PreferenceManager
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -199,5 +200,25 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onLowMemory() {
         super.onLowMemory()
         findViewById<MapView>(R.id.mapView).onLowMemory()
+    }
+
+    private fun setConfig(){
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val maps_types = sharedPreferences.getString("tipo", "Satélite")
+        val zoom = sharedPreferences.getString("zoom", "Médio")
+        map.mapType = when (maps_types) {
+            "Rodovias" -> GoogleMap.MAP_TYPE_NORMAL
+            "Satélite" -> GoogleMap.MAP_TYPE_SATELLITE
+            "Híbrido" -> GoogleMap.MAP_TYPE_HYBRID
+            else -> GoogleMap.MAP_TYPE_NORMAL
+        }
+        val zoomLevel = when (zoom) {
+            "Perto" -> 20.0f
+            "Médio" -> 15.0f
+            "Distante" -> 10.0f
+            else -> 12.0f
+        }
+        //Ajustar aqui para colocar a latitude e longitude atual
+        //map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(currentLatitude, currentLongitude), zoomLevel))
     }
 }
