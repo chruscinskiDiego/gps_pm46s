@@ -1,10 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="br.edu.utfpr.gps_pm46s">
 
+    <!-- Permissões necessárias -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Para Android ≤ Q, caso você precise ler imagens do armazenamento -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -16,22 +18,33 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Gps_pm46s"
         tools:targetApi="31">
+
+        <!-- Sua activity de configurações -->
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings" />
+
+        <!-- Declare a RegisterActivity aqui -->
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false"
+            android:label="Cadastrar Ponto" />
+
+        <!-- Activity principal -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Chave da Google Maps API -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDsy454kAkXofX828BEMieAQ7EbtpjohZY" />
-    </application>
 
+    </application>
 </manifest>
