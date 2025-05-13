@@ -4,9 +4,9 @@
 
         <ListPreference
             app:defaultValue="Satélite"
-            app:entries="@array/maps_types"
-            app:entryValues="@array/maps_types"
-            app:key="maps_types"
+            app:entries="@array/mapsTypes"
+            app:entryValues="@array/mapsTypes"
+            app:key="mapsTypes"
             app:title="@string/maps_type_header"
             app:useSimpleSummaryProvider="true" />
 
