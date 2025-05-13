@@ -40,6 +40,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var map: GoogleMap
 
+    private var currentLatitude: Double = 0.0
+    private var currentLongitude: Double = 0.0
+
     private val registerPointLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -105,7 +108,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         fabAction2.setOnClickListener {
             collapseFab()
-            // outra ação, se precisar
+
+            //val intent = Intent(this, ListPontosTuristicosActivity::class.java)
+            startActivity(intent)
         }
 
 
@@ -180,9 +185,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             .lastLocation
             .addOnSuccessListener { loc: Location? ->
                 loc?.let {
+                    currentLatitude = it.latitude
+                    currentLongitude = it.longitude
+
                     val userLoc = LatLng(it.latitude, it.longitude)
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, 15f))
+                    //map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, 15f))
                     map.addMarker(MarkerOptions().position(userLoc).title("Você está aqui"))
+
+                    setConfig()
                 }
             }
     }
@@ -190,6 +200,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onResume() {
         super.onResume()
         findViewById<MapView>(R.id.mapView).onResume()
+        if (::map.isInitialized) {
+            if (currentLatitude != 0.0 || currentLongitude != 0.0) {
+                setConfig()
+            } else {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED
+                ) {
+                    enableMyLocation()
+                }
+            }
+        }
     }
 
     override fun onPause() {
@@ -205,5 +226,25 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onLowMemory() {
         super.onLowMemory()
         findViewById<MapView>(R.id.mapView).onLowMemory()
+    }
+
+    private fun setConfig(){
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val mapsTypes = sharedPreferences.getString("mapsTypes", "Rodovias")
+        val zoom = sharedPreferences.getString("zoom", "Médio")
+        map.mapType = when (mapsTypes) {
+            "Rodovias" -> GoogleMap.MAP_TYPE_NORMAL
+            "Satélite" -> GoogleMap.MAP_TYPE_SATELLITE
+            "Híbrido" -> GoogleMap.MAP_TYPE_HYBRID
+            else -> GoogleMap.MAP_TYPE_SATELLITE
+        }
+        val zoomLevel = when (zoom) {
+            "Perto" -> 20.0f
+            "Médio" -> 15.0f
+            "Distante" -> 10.0f
+            else -> 15.0f
+        }
+        //Ajustar aqui para colocar a latitude e longitude atual
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(currentLatitude, currentLongitude), zoomLevel))
     }
 }

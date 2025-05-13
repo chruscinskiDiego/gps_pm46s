@@ -1,6 +1,6 @@
 <resources>
     <!-- Reply Preference -->
-    <string-array name="maps_types">
+    <string-array name="mapsTypes">
         <item>Rodovias</item>
         <item>Satélite</item>
         <item>Híbrido</item>
