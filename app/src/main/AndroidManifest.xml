@@ -19,17 +19,23 @@
         android:theme="@style/Theme.Gps_pm46s"
         tools:targetApi="31">
 
-        <!-- Sua activity de configurações -->
+        <!--Settings Activity -->
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings" />
 
-        <!-- Declare a RegisterActivity aqui -->
+        <!--RegisterActivity-->
         <activity
             android:name=".RegisterActivity"
             android:exported="false"
             android:label="Cadastrar Ponto" />
+
+        <!-- PointsList -->
+        <activity
+            android:name=".PointsListActivity"
+            android:exported="false"
+            android:label="Listar Pontos" />
 
         <!-- Activity principal -->
         <activity

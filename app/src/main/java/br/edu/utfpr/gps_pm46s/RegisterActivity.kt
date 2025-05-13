@@ -1,7 +1,5 @@
 package br.edu.utfpr.gps_pm46s
 
-import android.app.Activity
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
@@ -10,6 +8,7 @@ import com.google.android.material.textfield.TextInputEditText
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import br.edu.utfpr.gps_pm46s.database.GpsDbHelper
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -19,6 +18,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var etDescription: TextInputEditText
     private lateinit var ivPhoto: ImageView
     private var photoUri: Uri? = null
+    private lateinit var dbHelper: GpsDbHelper
 
     //img da galeria
     private val pickImageLauncher = registerForActivityResult(
@@ -53,12 +53,14 @@ class RegisterActivity : AppCompatActivity() {
             pickImageLauncher.launch("image/*")
         }
 
+        dbHelper = GpsDbHelper(this)
+
         btnSave.setOnClickListener {
             savePoint()
         }
     }
 
-    private fun savePoint() {
+    /*private fun savePoint() {
         val name = etName.text.toString().trim()
         val lat  = etLatitude.text.toString().toDoubleOrNull()
         val lng  = etLongitude.text.toString().toDoubleOrNull()
@@ -79,5 +81,33 @@ class RegisterActivity : AppCompatActivity() {
         }
         setResult(Activity.RESULT_OK, data)
         finish()
+    }*/
+
+    private fun savePoint() {
+        val name = etName.text.toString().trim()
+        val lat  = etLatitude.text.toString().toDoubleOrNull()
+        val lng  = etLongitude.text.toString().toDoubleOrNull()
+        val desc = etDescription.text.toString().trim()
+
+        if (name.isEmpty() || lat == null || lng == null || desc.isEmpty() || photoUri == null) {
+            Toast.makeText(this, "Preencha todos os campos e escolha uma imagem", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val id = dbHelper.insertPoint(
+            name = name,
+            lat = lat,
+            lng = lng,
+            desc = desc,
+            photoUri = photoUri.toString(),
+
+        )
+
+        if (id > 0) {
+            Toast.makeText(this, "Ponto salvo com sucesso!", Toast.LENGTH_SHORT).show()
+            finish()
+        } else {
+            Toast.makeText(this, "Erro ao salvar o ponto.", Toast.LENGTH_SHORT).show()
+        }
     }
 }

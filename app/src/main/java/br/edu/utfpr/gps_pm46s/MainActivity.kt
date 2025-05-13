@@ -108,6 +108,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             // outra ação, se precisar
         }
 
+
         // Toolbar
         val toolbar: Toolbar = findViewById(R.id.my_toolbar)
         toolbar.title = "Pontos Turísticos"
