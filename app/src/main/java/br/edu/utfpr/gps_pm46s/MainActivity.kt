@@ -24,6 +24,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.preference.PreferenceManager
 import br.edu.utfpr.gps_pm46s.database.DatabaseHandler
 import br.edu.utfpr.gps_pm46s.databinding.ActivityMainBinding
+import br.edu.utfpr.gps_pm46s.entity.PontoTuristico
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -65,7 +66,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         .title(name)
                         .snippet(desc)
                 )
-                // Aqui você pode armazenar `uri` em um repositório/localDB, se quiser.
+                val ponto = PontoTuristico(0, lat, lng, name, desc, uri.toString())
+                banco.insert(ponto)
             }
         }
     }
@@ -73,8 +75,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityMainBinding.inflate( layoutInflater )
         setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate( layoutInflater )
         initDatabase()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

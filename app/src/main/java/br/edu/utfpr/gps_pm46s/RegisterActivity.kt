@@ -70,6 +70,14 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
+        photoUri?.let { uri ->
+            grantUriPermission(
+                "br.edu.utfpr.gps_pm46s",
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        }
+
         // ações com os dados, salvar em um bd, etc...
         val data = Intent().apply {
             putExtra("name", name)

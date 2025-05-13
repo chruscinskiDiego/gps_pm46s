@@ -12,6 +12,7 @@ constraintlayout = "2.2.1"
 playServicesLocation = "21.3.0"
 playServicesMaps = "19.2.0"
 preference = "1.2.0"
+glide = "4.16.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -25,6 +26,8 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version = "4.12.0" }
+glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version = "4.12.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
