@@ -2,10 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="br.edu.utfpr.gps_pm46s">
 
-    <!-- Permissões necessárias -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- Para Android ≤ Q, caso você precise ler imagens do armazenamento -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -19,19 +17,22 @@
         android:theme="@style/Theme.Gps_pm46s"
         tools:targetApi="31">
 
-        <!-- Sua activity de configurações -->
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings" />
 
-        <!-- Declare a RegisterActivity aqui -->
         <activity
             android:name=".RegisterActivity"
             android:exported="false"
-            android:label="Cadastrar Ponto" />
+            android:label="@string/title_register_activity" />
 
-        <!-- Activity principal -->
+        <activity
+            android:name=".ListPontosTuristicosActivity"
+            android:exported="false"
+            android:label="@string/title_list_activity"/>
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -41,7 +42,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Chave da Google Maps API -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDsy454kAkXofX828BEMieAQ7EbtpjohZY" />

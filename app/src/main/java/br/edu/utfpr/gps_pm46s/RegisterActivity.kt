@@ -10,6 +10,7 @@ import com.google.android.material.textfield.TextInputEditText
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import br.edu.utfpr.gps_pm46s.entity.PontoTuristico
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -77,7 +78,35 @@ class RegisterActivity : AppCompatActivity() {
             putExtra("desc", desc)
             putExtra("photoUri", photoUri.toString())
         }
-        setResult(Activity.RESULT_OK, data)
+
+        /*
+        if (photoUri == null) {
+            Toast.makeText(this, "Escolha uma imagem para o ponto turístico", Toast.LENGTH_SHORT).show()
+            return
+        }*/
+
+        val pontoTuristico = PontoTuristico(
+            _id = 0, // será auto incrementado no banco
+            latitude = lat,
+            longitude = lng,
+            nome = name,
+            descricao = desc,
+            fotoUri = photoUri.toString()
+        )
+
+        // Salvar no banco de dados
+        val db = br.edu.utfpr.gps_pm46s.database.DatabaseHandler(this)
+        db.insert(pontoTuristico)
+
+        // Retornar para MainActivity com dados
+        val resultIntent = Intent().apply {
+            putExtra("name", name)
+            putExtra("lat", lat)
+            putExtra("lng", lng)
+            putExtra("desc", desc)
+            putExtra("photoUri", photoUri.toString())
+        }
+        setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }
 }

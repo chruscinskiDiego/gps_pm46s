@@ -22,6 +22,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.preference.PreferenceManager
+import br.edu.utfpr.gps_pm46s.database.DatabaseHandler
+import br.edu.utfpr.gps_pm46s.databinding.ActivityMainBinding
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -42,6 +44,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private var currentLatitude: Double = 0.0
     private var currentLongitude: Double = 0.0
+
+    private lateinit var binding : ActivityMainBinding
+    private lateinit var banco : DatabaseHandler
+
 
     private val registerPointLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -67,7 +73,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        binding = ActivityMainBinding.inflate( layoutInflater )
         setContentView(R.layout.activity_main)
+        initDatabase()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(bars.left, bars.top, bars.right, bars.bottom)
@@ -109,7 +117,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         fabAction2.setOnClickListener {
             collapseFab()
 
-            //val intent = Intent(this, ListPontosTuristicosActivity::class.java)
+            val intent = Intent(this, ListPontosTuristicosActivity::class.java)
             startActivity(intent)
         }
 
@@ -245,5 +253,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         //Ajustar aqui para colocar a latitude e longitude atual
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(currentLatitude, currentLongitude), zoomLevel))
+    }
+
+    private fun initDatabase() {
+
+        banco = DatabaseHandler( this )
+
     }
 }
