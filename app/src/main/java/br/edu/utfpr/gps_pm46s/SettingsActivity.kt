@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
 import android.widget.Button
-import android.widget.ImageButton
 
 class SettingsActivity : AppCompatActivity() {
 
