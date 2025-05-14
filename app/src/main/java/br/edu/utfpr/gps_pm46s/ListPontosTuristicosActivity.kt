@@ -2,6 +2,7 @@ package br.edu.utfpr.gps_pm46s
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.edu.utfpr.gps_pm46s.adapter.PontosAdapter
@@ -13,18 +14,28 @@ class ListPontosTuristicosActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PontosAdapter
     private lateinit var dbHelper: GpsDbHelper
+    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.list_pontos_turisticos_activity)
 
+        toolbar = findViewById(R.id.my_toolbar)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         recyclerView = findViewById(R.id.rvPontosTuristicos)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         dbHelper = GpsDbHelper(this)
         carregarPontos()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
     }
 
     private fun carregarPontos() {

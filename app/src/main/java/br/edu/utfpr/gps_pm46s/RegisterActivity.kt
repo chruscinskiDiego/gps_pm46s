@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.widget.Toolbar
 import br.edu.utfpr.gps_pm46s.database.GpsDbHelper
 import java.io.File
 import java.io.IOException
@@ -35,6 +36,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private lateinit var takePictureLauncher: ActivityResultLauncher<Intent>
     private lateinit var currentPhotoPath: String
+    private lateinit var toolbar: Toolbar
 
     // Permissão para câmera
     private val cameraPermissionRequest = registerForActivityResult(
@@ -60,6 +62,12 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.register_activity)
+
+        toolbar = findViewById(R.id.toolbar) // Inicialize a Toolbar com o ID correto
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true) // Habilita o botão "Voltar" padrão
+        supportActionBar?.setDisplayShowHomeEnabled(true) // Exibe o ícone padrão
 
         //views
         etName        = findViewById(R.id.etName)
@@ -100,6 +108,11 @@ class RegisterActivity : AppCompatActivity() {
         btnSave.setOnClickListener {
             savePoint()
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
     }
 
     /*private fun savePoint() {

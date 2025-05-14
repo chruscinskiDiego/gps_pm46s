@@ -1,79 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="2dp">
 
-    <!--Imagem-->
-    <ImageView
-        android:id="@+id/ivMidia"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:paddingBottom="12dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_launcher_foreground" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!--Imagem-->
+        <ImageView
+            android:id="@+id/ivMidia"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_foreground"
+            tools:ignore="ContentDescription" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
     <!--Nome-->
-    <TextView
+        <TextView
         android:id="@+id/tvNome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Cachoeira do Crepúsculo"
-        android:textStyle="bold"
         android:textColor="@color/black"
-        android:textSize="18sp"/>
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
-    <!--Latitude-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/latitude"
-            android:textColor="@color/black"
-            android:textSize="18sp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
 
-        <TextView
-            android:id="@+id/tvLatitude"
+        <!--Latitude-->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=" -52.692110"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="16sp"/>
-    </LinearLayout>
+            android:orientation="horizontal">
 
-    <!--Longitude-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/latitude"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/longitude"
-            android:textColor="@color/black"
-            android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/tvLatitude"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="-52.692110"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="16sp" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvLongitude"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp" />
+
+        <!--Longitude-->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=" -52.692110"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="16sp"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/longitude"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvLongitude"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="-52.692110"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <TextView
+            android:id="@+id/tvCaminhoImagem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="content://..."
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"/>
+
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/tvCaminhoImagem"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="content://..."
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"/>
-
-</LinearLayout>
+</androidx.cardview.widget.CardView>
