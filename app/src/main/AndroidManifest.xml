@@ -5,7 +5,6 @@
     <!-- Permissões necessárias -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- Para Android ≤ Q, caso você precise ler imagens do armazenamento -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -33,9 +32,9 @@
 
         <!-- PointsList -->
         <activity
-            android:name=".PointsListActivity"
+            android:name=".ListPontosTuristicosActivity"
             android:exported="false"
-            android:label="Listar Pontos" />
+            android:label="@string/title_list_activity"/>
 
         <!-- Activity principal -->
         <activity

@@ -1,5 +1,6 @@
 package br.edu.utfpr.gps_pm46s
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
@@ -92,6 +93,14 @@ class RegisterActivity : AppCompatActivity() {
         if (name.isEmpty() || lat == null || lng == null || desc.isEmpty() || photoUri == null) {
             Toast.makeText(this, "Preencha todos os campos e escolha uma imagem", Toast.LENGTH_SHORT).show()
             return
+        }
+
+        photoUri?.let { uri ->
+            grantUriPermission(
+                "br.edu.utfpr.gps_pm46s",
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
         }
 
         val id = dbHelper.insertPoint(
