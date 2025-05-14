@@ -22,6 +22,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.preference.PreferenceManager
+import br.edu.utfpr.gps_pm46s.adapter.PontosAdapter
+import br.edu.utfpr.gps_pm46s.database.GpsDbHelper
+import br.edu.utfpr.gps_pm46s.entity.PontoTuristico
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -37,6 +40,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var primaryFab: FloatingActionButton
     private lateinit var fabAction1: FloatingActionButton
     private lateinit var fabAction2: FloatingActionButton
+    private lateinit var adapter: PontosAdapter
+    private lateinit var dbHelper: GpsDbHelper
 
     private lateinit var map: GoogleMap
 
@@ -118,6 +123,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val toolbar: Toolbar = findViewById(R.id.my_toolbar)
         toolbar.title = "Pontos Turísticos"
         setSupportActionBar(toolbar)
+
+        // Carregar Pontos
+        dbHelper = GpsDbHelper(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -181,6 +189,23 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun getLastKnownLocation() {
+        val cursor = dbHelper.list()
+        val pontos = mutableListOf<PontoTuristico>()
+
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getInt(0)
+                val lat = cursor.getDouble(1)
+                val lng = cursor.getDouble(2)
+                val nome = cursor.getString(3)
+                val desc = cursor.getString(4)
+                val foto = cursor.getString(5)
+
+                pontos.add(PontoTuristico(id, lat, lng, nome, desc, foto))
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
         LocationServices.getFusedLocationProviderClient(this)
             .lastLocation
             .addOnSuccessListener { loc: Location? ->
@@ -189,8 +214,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     currentLongitude = it.longitude
 
                     val userLoc = LatLng(it.latitude, it.longitude)
-                    //map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, 15f))
-                    map.addMarker(MarkerOptions().position(userLoc).title("Você está aqui"))
+
+                    // Adiciona os pontos turísticos do adapter no mapa
+                    for (ponto in pontos) {
+                        val pontoLoc = LatLng(ponto.latitude, ponto.longitude)
+                        map.addMarker(
+                            MarkerOptions()
+                                .position(pontoLoc)
+                                .title(ponto.nome)
+                                .snippet(ponto.descricao)
+                        )
+                    }
 
                     setConfig()
                 }
@@ -211,6 +245,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         }
+        getLastKnownLocation()
     }
 
     override fun onPause() {
