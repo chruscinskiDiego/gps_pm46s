@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         fabAction2.setOnClickListener {
             collapseFab()
 
-            //val intent = Intent(this, ListPontosTuristicosActivity::class.java)
+            val intent = Intent(this, ListPontosTuristicosActivity::class.java)
             startActivity(intent)
         }
 

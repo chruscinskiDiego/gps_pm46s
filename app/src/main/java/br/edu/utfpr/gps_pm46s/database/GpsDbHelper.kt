@@ -2,6 +2,7 @@ package br.edu.utfpr.gps_pm46s.database
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
@@ -69,5 +70,16 @@ class GpsDbHelper(context: Context) : SQLiteOpenHelper(
         }
     }
 
-    // Você pode adicionar métodos de query, update e delete conforme precisar
+    fun list(): Cursor {
+        val db = readableDatabase
+        return db.query(
+            TABLE_NAME,
+            arrayOf(COL_ID, COL_LAT, COL_LNG, COL_NAME, COL_DESC, COL_PHOTO),
+            null,
+            null,
+            null,
+            null,
+            "$COL_CREATED_AT DESC"
+        )
+    }
 }
