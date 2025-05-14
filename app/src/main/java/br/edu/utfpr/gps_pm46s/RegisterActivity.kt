@@ -1,15 +1,27 @@
 package br.edu.utfpr.gps_pm46s
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.google.android.material.textfield.TextInputEditText
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import br.edu.utfpr.gps_pm46s.database.GpsDbHelper
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -20,6 +32,20 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var ivPhoto: ImageView
     private var photoUri: Uri? = null
     private lateinit var dbHelper: GpsDbHelper
+
+    private lateinit var takePictureLauncher: ActivityResultLauncher<Intent>
+    private lateinit var currentPhotoPath: String
+
+    // Permissão para câmera
+    private val cameraPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            dispatchTakePictureIntent()
+        } else {
+            Toast.makeText(this, "Permissão para câmera negada.", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     //img da galeria
     private val pickImageLauncher = registerForActivityResult(
@@ -42,7 +68,21 @@ class RegisterActivity : AppCompatActivity() {
         etDescription = findViewById(R.id.etDescription)
         ivPhoto       = findViewById(R.id.ivPhoto)
         val btnPick   = findViewById<Button>(R.id.btnPickImage)
+        val btnTakePhoto = findViewById<Button>(R.id.btnTakePhoto)
         val btnSave   = findViewById<Button>(R.id.btnSave)
+
+        dbHelper = GpsDbHelper(this)
+
+        // Inicializa o ActivityResultLauncher para tirar foto
+        takePictureLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                setPic()
+            } else {
+                Toast.makeText(this, "Falha ao capturar a foto.", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         intent.extras?.let { extras ->
             extras.getDouble("lat") .takeIf { it != 0.0 }?.let { etLatitude.setText(it.toString()) }
@@ -50,11 +90,12 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         btnPick.setOnClickListener {
-
             pickImageLauncher.launch("image/*")
         }
 
-        dbHelper = GpsDbHelper(this)
+        btnTakePhoto.setOnClickListener {
+            checkCameraPermission()
+        }
 
         btnSave.setOnClickListener {
             savePoint()
@@ -83,6 +124,64 @@ class RegisterActivity : AppCompatActivity() {
         setResult(Activity.RESULT_OK, data)
         finish()
     }*/
+
+    private fun checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permissão não concedida, solicitar
+            cameraPermissionRequest.launch(Manifest.permission.CAMERA)
+        } else {
+            // Permissão já concedida, abrir a câmera
+            dispatchTakePictureIntent()
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Cria um nome de arquivo de imagem com base no tempo
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val imageFileName = "JPEG_${timeStamp}_"
+        val storageDir: File? = getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            imageFileName, /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Salva o caminho do arquivo para usar depois
+            currentPhotoPath = absolutePath
+        }
+    }
+
+    private fun dispatchTakePictureIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            // Garante que há um aplicativo de câmera para lidar com a intent
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                // Cria o arquivo onde a foto deve ir
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+                    // Erro ao criar o arquivo
+                    null
+                }
+                // Continua apenas se o arquivo foi criado com sucesso
+                photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        this,
+                        "br.edu.utfpr.gps_pm46s.fileprovider", // Substitua pelo seu authority no AndroidManifest.xml
+                        it
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    takePictureLauncher.launch(takePictureIntent)
+                }
+            }
+        }
+    }
+
+    private fun setPic() {
+        ivPhoto.setImageURI(Uri.fromFile(File(currentPhotoPath)))
+        photoUri = Uri.fromFile(File(currentPhotoPath)) // Atualiza o photoUri para salvar no banco
+    }
 
     private fun savePoint() {
         val name = etName.text.toString().trim()
